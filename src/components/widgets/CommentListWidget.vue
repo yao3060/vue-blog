@@ -17,10 +17,11 @@
       name: "comment-list",
       props: ['comments', 'level'],
       mounted() {
-
-        this.comments.forEach(function (ele, index) {
-          console.log(ele, index)
-        });
+        // if (this.comments.length > 1) {
+        //   this.comments.forEach(function (ele, index) {
+        //     console.log(ele, index)
+        //   });
+        // }
       }
     }
 </script>
