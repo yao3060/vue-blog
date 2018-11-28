@@ -13,14 +13,23 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import Posts from '../components/Posts';
+
+import Posts from '../components/Posts.vue';
 import Sidebar from '../components/Sidebar'
 
 export default {
-  name: 'Home',
+  name: 'Blog',
+  title: 'My Blog | Blog',
   components: {
-    Sidebar, Posts,
+    Posts,Sidebar
   },
 };
 </script>
+
+<style scoped>
+
+  .media {
+    margin-bottom: 20px;
+  }
+
+</style>
