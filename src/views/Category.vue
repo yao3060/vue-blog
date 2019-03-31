@@ -12,27 +12,28 @@
 </template>
 
 <script>
-  import Posts from  '../components/Posts'
-  import Sidebar from '../components/Sidebar'
-  export default {
-    name: "Category",
-    components:{
-        Posts, Sidebar
+import Posts from '../components/Posts';
+import Sidebar from '../components/Sidebar';
+
+export default {
+  name: 'Category',
+  components: {
+    Posts, Sidebar,
+  },
+  data() {
+    return {
+      categoryId: '',
+    };
+  },
+  mounted() {
+    this.categoryId = this.$route.params.id;
+  },
+  watch: {
+    '$route.params.id': function (id) {
+      this.categoryId = id;
     },
-    data() {
-      return {
-        categoryId: ''
-      }
-    },
-    mounted() {
-      this.categoryId = this.$route.params.id
-    },
-    watch: {
-      '$route.params.id': function (id) {
-        this.categoryId = id
-      }
-    },
-  }
+  },
+};
 </script>
 
 <style scoped>

@@ -1,41 +1,34 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Store from './store'
+import Store from './store';
 
 
 Vue.use(Router);
 
-let routes = [
+const routes = [
   {
     path: '/',
     name: 'home',
     component: () => import('./views/Home.vue'),
-    meta: {}
+    meta: {},
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('./views/Login.vue'),
-    meta: {}
+    meta: {},
   },
   {
     path: '/register',
     name: 'register',
     component: () => import('./views/Register.vue'),
-    meta: {}
-  },
-
-  {
-    path: '/logout',
-    name: 'logout',
-    component: () => { console.log('logout ...')},
-    meta: {}
+    meta: {},
   },
   {
     path: '/profile',
     name: 'profile',
     component: () => import('./views/Profile.vue'),
-    meta:{ requireAuth: true }
+    meta: { requireAuth: true },
   },
   {
     path: '/about',
@@ -44,50 +37,45 @@ let routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    meta: {}
+    meta: {},
   },
   {
     path: '/blog/',
     name: 'blog',
     component: () => import('./views/Blog.vue'),
-    meta: {}
+    meta: {},
   },
   {
     path: '/blog/:id',
     name: 'single',
     component: () => import('./views/Single.vue'),
-    meta: {}
+    meta: {},
   },
   {
     path: '/category/:id',
     name: 'category',
     component: () => import('./views/Category.vue'),
-    meta: {}
+    meta: {},
   },
 ];
 
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
-
-  console.log(Store.state.AuthUser.authenticated)
+  console.log(Store.state.AuthUser.authenticated);
 
   if (to.meta.requireAuth) {
-
     if (Store.state.AuthUser.authenticated || localStorage.getItem('token')) {
-      return next()
-    } else {
-      return next({name: 'login'})
+      return next();
     }
-
+    return next({ name: 'login' });
   }
 
-  return next()
-
+  return next();
 });
 
 export default router;

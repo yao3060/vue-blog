@@ -1,5 +1,6 @@
 <template>
   <div class="home container">
+    <carousel></carousel>
     <div class="row">
       <div class="col-sm-8">
         <posts></posts>
@@ -14,13 +15,14 @@
 
 <script>
 // @ is an alias to /src
+import Carousel from '../components/Carousel'
 import Posts from '../components/Posts';
-import Sidebar from '../components/Sidebar'
+import Sidebar from '../components/Sidebar';
 
 export default {
   name: 'Home',
   components: {
-    Sidebar, Posts,
+    Sidebar, Posts, Carousel
   },
 };
 </script>

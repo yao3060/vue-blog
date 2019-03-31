@@ -23,9 +23,9 @@
         <router-link v-show="!user.authenticated" :to="{name:'register'}"  tag="li" class="nav-item" >
           <a class="btn btn-outline-info">Register</a>
         </router-link>
-        <router-link v-show="user.authenticated"  :to="{name:'logout'}" tag="li" class="nav-item" >
-          <a class="btn btn-outline-info">Logout</a>
-        </router-link>
+        <li class="nav-item" v-show="user.authenticated">
+          <a class="btn btn-outline-info"  @click.prevent="logout" href="#">Logout</a>
+        </li>
       </ul>
     </div>
     </div>
@@ -33,15 +33,27 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  export default {
-    name: 'Navbar',
-    computed:{
-      ...mapState({
-        user: state => state.AuthUser
-      })
+import { mapState } from 'vuex';
+
+export default {
+  name: 'Navbar',
+  computed: {
+    ...mapState({
+      user: state => state.AuthUser,
+    }),
+  },
+  methods: {
+
+    logout() {
+      console.log('Logout now')
+
+      this.$store.dispatch('userLogout').then((response) => {
+        this.$router.push({ name: 'login' })
+      } )
     }
-  }
+
+  },
+};
 </script>
 
 <style scoped>

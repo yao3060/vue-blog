@@ -49,15 +49,16 @@
 </template>
 
 <script>
-    import AuthUser from '../store/modules/auth-user'
-    export default {
-      name: "Profile",
-      data() {
-          return {
-            user: AuthUser.state
-          }
-      },
-    }
+import AuthUser from '../store/modules/auth-user';
+
+export default {
+  name: 'Profile',
+  data() {
+    return {
+      user: AuthUser.state,
+    };
+  },
+};
 </script>
 
 <style scoped>

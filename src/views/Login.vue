@@ -62,9 +62,7 @@ export default {
   methods: {
 
     login() {
-
       this.$validator.validateAll().then((result) => {
-
         if (result) {
           // eslint-disable-next-line
 
@@ -73,14 +71,12 @@ export default {
             password: this.password,
           };
 
-          this.$store.dispatch('loginRequest', formData).then( response => {
-            this.$router.push({name: 'profile'})
+          this.$store.dispatch('loginRequest', formData).then((response) => {
+            this.$router.push({ name: 'profile' });
           });
-
         } else {
           alert('Correct them errors!');
         }
-
       });
     },
   },

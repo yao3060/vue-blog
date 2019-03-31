@@ -1,11 +1,11 @@
 <template>
-    
+
 </template>
 
 <script>
-    export default {
-        name: "NodeTree"
-    }
+export default {
+  name: 'NodeTree',
+};
 </script>
 
 <style scoped>

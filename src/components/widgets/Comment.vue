@@ -8,21 +8,22 @@
 </template>
 
 <script>
-  import CommentList from './CommentListWidget'
-  import CommentForm from './CommentFormWidget'
-    export default {
-      name: "Comment",
-      props: ['comment', 'collection'],
-      data(){
-        return {
-          replyToComment: false
-        }
-      },
-      components: {
-        'comment-list': CommentList,
-        'comment-form': CommentForm
-      }
-    }
+import CommentList from './CommentListWidget';
+import CommentForm from './CommentFormWidget';
+
+export default {
+  name: 'Comment',
+  props: ['comment', 'collection'],
+  data() {
+    return {
+      replyToComment: false,
+    };
+  },
+  components: {
+    'comment-list': CommentList,
+    'comment-form': CommentForm,
+  },
+};
 </script>
 
 <style scoped>

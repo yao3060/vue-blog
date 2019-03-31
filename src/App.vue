@@ -14,10 +14,10 @@ import Navbar from './components/Navbar.vue';
 export default {
   name: 'App',
   title: 'My Blog',
-  created(){
-    let token = localStorage.getItem('token')
-    if (token){
-      this.$store.dispatch('getUserInfo')
+  created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.$store.dispatch('getUserInfo');
     }
   },
   components: {

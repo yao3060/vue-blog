@@ -101,8 +101,16 @@ var getMyInfo = {
 
 <script>
 
-  export default {
-    name:'About',
-    title: 'My Blog | About'
-  }
+// Main file
+import Vue from 'vue';
+import VuePrism from 'vue-prism';
+
+import 'prismjs/themes/prism.css';
+
+Vue.use(VuePrism);
+
+export default {
+  name: 'About',
+  title: 'My Blog | About',
+};
 </script>

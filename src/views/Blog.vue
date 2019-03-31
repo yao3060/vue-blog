@@ -15,13 +15,13 @@
 <script>
 
 import Posts from '../components/Posts.vue';
-import Sidebar from '../components/Sidebar'
+import Sidebar from '../components/Sidebar';
 
 export default {
   name: 'Blog',
   title: 'My Blog | Blog',
   components: {
-    Posts,Sidebar
+    Posts, Sidebar,
   },
 };
 </script>

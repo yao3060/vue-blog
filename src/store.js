@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import AuthUser from './store/modules/auth-user'
+import AuthUser from './store/modules/auth-user';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    AuthUser
+    AuthUser,
   },
   state: {
     comments: [],
@@ -15,27 +15,21 @@ export default new Vuex.Store({
   mutations: {
 
     pushComments(state, payload) {
-      state.comments.unshift(payload)
+      state.comments.unshift(payload);
     },
     updateComments(state, payload) {
-
       if (state.comments.length < 1) {
         state.comments.push({ postId: payload.postId, comments: [payload] });
       } else {
-
         // let post = state.comments.find((post) => {
         //   return payload.post === post.postId;
         // });
 
-        let post = state.comments.find(function (post) {
-          return post.postId == payload.post
-        });
+        const post = state.comments.find(post => post.postId == payload.post);
 
-        post.comments.unshift(payload)
-
+        post.comments.unshift(payload);
       }
-
-    }
+    },
 
   },
   actions: {

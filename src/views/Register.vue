@@ -15,11 +15,11 @@
 </template>
 
 <script>
-    export default {
-      name: "Register",
-      title: 'My Blog | Register'
+export default {
+  name: 'Register',
+  title: 'My Blog | Register',
 
-    }
+};
 </script>
 
 <style scoped>

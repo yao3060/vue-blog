@@ -59,154 +59,149 @@
 </template>
 
 <script>
-  import Sidebar from '../components/Sidebar'
-  import CommentFrom from '../components/widgets/CommentFormWidget'
-  import CommentList from '../components/widgets/CommentListWidget'
+import Sidebar from '../components/Sidebar';
+import CommentFrom from '../components/widgets/CommentFormWidget';
+import CommentList from '../components/widgets/CommentListWidget';
+import { getRndInteger } from '../includes/helpers'
 
-  export default {
-    name: 'single-post',
+export default {
+  name: 'single-post',
 
-    components: {
-      Sidebar, CommentFrom, CommentList
+  components: {
+    Sidebar, CommentFrom, CommentList,
+  },
+
+  data() {
+    return {
+      post: [],
+      newComment: '',
+      commentParentId: 0,
+      postId: 0,
+      postTitle: '',
+      postContent: '',
+      categories: [],
+      featured_image: [],
+    };
+  },
+  title: 'My Blog',
+  beforeMount() {
+    this.postId = this.$route.params.id;
+    this.getPost();
+  },
+  mounted() {
+    this.getComments();
+  },
+  watch: {
+    // 如果 `question` 发生改变，这个函数就会运行
+    postTitle(newTitle, oldTitle) {
+      if (newTitle !== oldTitle) {
+        window.document.title = `My Blog | ${newTitle}`;
+      }
+    },
+    comments(newVal, oldVal) {
+      // this.comments = recursiveComments(0, newVal)
     },
 
-    data() {
-      return {
-        post: [],
-        newComment: '',
-        commentParentId: 0,
-        postId: 0,
-        postTitle: '',
-        postContent: '',
-        categories: [],
-        featured_image: []
+  },
+  computed: {
+    comments() {
+      const allComments = this.$store.state.comments;
+      if (allComments.length > 0) {
+        const post = allComments.find(post => post.postId === this.postId);
+        return post.comments;
+      }
+      return [];
+    },
+  },
+
+  methods: {
+
+    getComments() {
+      const params = {
+        post: this.$route.params.id,
+        per_page: 50,
       };
-    },
-    title: 'My Blog',
-    beforeMount() {
-      this.postId = this.$route.params.id
-      this.getPost()
-    },
-    mounted() {
-      this.getComments()
-    },
-    watch: {
-      // 如果 `question` 发生改变，这个函数就会运行
-      postTitle: function (newTitle, oldTitle) {
-        if (newTitle !== oldTitle) {
-          window.document.title = 'My Blog | ' + newTitle
-        }
-      },
-      comments: function(newVal, oldVal){
-        //this.comments = recursiveComments(0, newVal)
-      }
-
-    },
-    computed: {
-      comments(){
-        let allComments = this.$store.state.comments
-        if (allComments.length > 0 ) {
-          const post = allComments.find( post => post.postId === this.postId );
-          return post.comments
-        } else {
-          return [];
-        }
-
-      }
+      axios.get(`${APIUrl}/wp/v2/comments`, { params }).then((response) => {
+        const comments = recursiveComments(0, response.data);
+        this.$store.commit('pushComments', { postId: this.postId, comments });
+      });
     },
 
-    methods: {
+    postComment() {
+      const formData = {
+        post: this.post.id,
+        parent: this.commentParentId,
+        content: this.newComment,
+        author_email: this.$store.state.AuthUser.email,
+      };
 
-      getComments() {
-        let params = {
-          post: this.$route.params.id,
-          per_page: 50
-        }
-        axios.get(APIUrl + '/wp/v2/comments', {params}).then((response) => {
+      console.log(formData);
+    },
 
-          let comments =  recursiveComments(0, response.data )
-          this.$store.commit('pushComments', { postId: this.postId, comments: comments });
+    getPost() {
+      axios.get(`${APIUrl}/wp/v2/posts/${this.$route.params.id}`)
+        .then((response) => {
+          this.post = response.data;
 
-        })
+          this.postTitle = response.data.title.rendered;
+          this.postContent = response.data.content.rendered;
 
-      },
+          if (this.post.categories) {
+            this.getCategories();
+          }
 
-      postComment() {
+          if (this.post.featured_media) {
+            this.getFeaturedImage();
+          }
+        });
+    },
 
-        let formData = {
-          post: this.post.id,
-          parent: this.commentParentId,
-          content: this.newComment,
-          author_email: this.$store.state.AuthUser.email
-        }
-
-        console.log(formData)
-
-      },
-
-      getPost() {
-        axios.get(APIUrl + '/wp/v2/posts/' + this.$route.params.id)
-          .then((response) => {
-            this.post = response.data;
-
-            this.postTitle = response.data.title.rendered;
-            this.postContent = response.data.content.rendered;
-
-            if (this.post.categories) {
-              this.getCategories();
-            }
-
-            if (this.post.featured_media) {
-              this.getFeaturedImage();
-            }
-          });
-      },
-
-      getCategories() {
-        axios.get(
-          'http://www.yaoin.net/wp-json/wp/v2/categories/',
-          {
-            params: {
-              include: this.post.categories,
-            },
+    getCategories() {
+      axios.get(
+        `${APIUrl}/wp/v2/categories/`,
+        {
+          params: {
+            include: this.post.categories,
           },
-        ).then((response) => {
-          this.categories = response.data;
-        });
-      },
-
-      getFeaturedImage() {
-        axios.get(
-          `http://www.yaoin.net/wp-json/wp/v2/media/${this.post.featured_media}`,
-        ).then((response) => {
-          this.featured_image = response.data;
-        });
-      },
-
+        },
+      ).then((response) => {
+        this.categories = response.data;
+      });
     },
-  };
 
-  function recursiveComments(parent_id, comments ) {
-    let newComments = [];
-    let newKey = 0;
-    comments.forEach(function ( comment, index) {
+    getFeaturedImage() {
+      axios.get(
+        `${APIUrl}/wp/v2/media/${this.post.featured_media}`,
+      ).then((response) => {
+        this.featured_image = response.data;
+      });
+    },
 
-      if (comment.parent == parent_id ) {
+  },
+};
 
-        newComments[newKey] = comment;
 
-        let children = recursiveComments( comment.id, comments );
-        if (children.length > 0){
-          newComments[newKey]['children'] = children
-        }
 
-        newKey++;
+function recursiveComments(parent_id, comments) {
+  const newComments = [];
+  let newKey = 0;
+  comments.forEach((comment, index) => {
+    if (comment.parent == parent_id) {
+      newComments[newKey] = comment;
+      newComments[newKey].avatar = 'http://i.pravatar.cc/64?img=' + getRndInteger(1,70);
+
+      const children = recursiveComments(comment.id, comments);
+      if (children.length > 0) {
+        newComments[newKey].avatar = 'http://i.pravatar.cc/64?img=' + getRndInteger(1,70);
+        newComments[newKey].children = children;
       }
 
-    });
-    console.log(newComments);
-    return newComments;
-  }
+      newKey++;
+    }
+  });
+  console.log(newComments);
+  return newComments;
+}
 
 </script>
 

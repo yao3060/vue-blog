@@ -3,13 +3,14 @@
 </template>
 
 <script>
-    import CategoriesWidget from './widgets/CategoriesWidget'
-    export default {
-      name: "Sidebar",
-      components: {
-        CategoriesWidget
-      },
-    }
+import CategoriesWidget from './widgets/CategoriesWidget';
+
+export default {
+  name: 'Sidebar',
+  components: {
+    CategoriesWidget,
+  },
+};
 </script>
 
 <style scoped>

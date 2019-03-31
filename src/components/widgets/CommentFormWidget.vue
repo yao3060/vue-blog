@@ -22,45 +22,41 @@
 
 <script>
 
-    import {mapState} from 'vuex'
+import { mapState } from 'vuex';
 
-    export default {
-      name: "CommentFormWidget",
-      props: ['post-id', 'parent-id'],
-      data(){
-        return{
-          content: ''
-        }
-      },
+export default {
+  name: 'CommentFormWidget',
+  props: ['post-id', 'parent-id'],
+  data() {
+    return {
+      content: '',
+    };
+  },
 
-      computed: mapState({
-        // 箭头函数可使代码更简练
-        user: state => state.AuthUser
+  computed: mapState({
+    // 箭头函数可使代码更简练
+    user: state => state.AuthUser,
 
-      }),
+  }),
 
-      methods: {
-        replyTo() {
-          let formData = {
-            post: this.postId,
-            parent: this.parentId,
-            content: this.content,
-            author_email: this.$store.state.AuthUser.email,
-            author_name: this.$store.state.AuthUser.name
-          }
+  methods: {
+    replyTo() {
+      const formData = {
+        post: this.postId,
+        parent: this.parentId,
+        content: this.content,
+        author_email: this.$store.state.AuthUser.email,
+        author_name: this.$store.state.AuthUser.name,
+      };
 
-          axios.post(APIUrl + '/wp/v2/comments', formData).then( (response) => {
+      axios.post(`${APIUrl}/wp/v2/comments`, formData).then((response) => {
+        this.$store.commit('updateComments', response.data);
 
-            this.$store.commit('updateComments', response.data);
-
-            this.content = ''
-
-          });
-
-
-        }
-      }
-    }
+        this.content = '';
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
